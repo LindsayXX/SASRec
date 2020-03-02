@@ -71,9 +71,12 @@ try:
             t_test = evaluate(model, dataset, args, sess)
             t_valid = evaluate_valid(model, dataset, args, sess)
             print ''
-            print 'epoch:%d, time: %f(s), valid (NDCG@10: %.4f, HR@10: %.4f), test (NDCG@10: %.4f, HR@10: %.4f)' % (
-            epoch, T, t_valid[0], t_valid[1], t_test[0], t_test[1])
-
+            #print 'epoch:%d, time: %f(s), valid (NDCG@10: %.4f, HR@10: %.4f), test (NDCG@10: %.4f, HR@10: %.4f)' % (
+            #epoch, T, t_valid[0], t_valid[1], t_test[0], t_test[1])
+            print  'epoch:%d, time: %f(s), valid (NDCG@1: %.4f, HR@1: %.4f， NDCG@5: %.4f, HR@5: %.4f， NDCG@10: %.4f, HR@10: %.4f， AP: %.4f), ' % (
+                epoch, T, t_valid[0], t_valid[1], t_valid[2], t_valid[3], t_valid[4], t_valid[5], t_valid[6])
+            print 'test (NDCG@1: %.4f, HR@1: %.4f， NDCG@5: %.4f, HR@5: %.4f， NDCG@10: %.4f, HR@10: %.4f， AP: %.4f)' % (
+                t_test[0], t_test[1], t_test[2], t_test[3], t_test[4], t_test[5], t_test[6])
             f.write(str(t_valid) + ' ' + str(t_test) + '\n')
             f.flush()
             t0 = time.time()

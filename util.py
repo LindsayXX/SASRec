@@ -41,7 +41,13 @@ def evaluate(model, dataset, args, sess):
     [train, valid, test, usernum, itemnum] = copy.deepcopy(dataset)
 
     NDCG = 0.0
+    NDCG_1 = 0.0
+    hit_1 = 0.0
+    NDCG_5 = 0.0
+    hit_5 = 0.0
     HT = 0.0
+    ap = 0.0
+
     valid_user = 0.0
 
     if usernum>10000:
@@ -75,14 +81,21 @@ def evaluate(model, dataset, args, sess):
 
         valid_user += 1
 
+        if rank < 1:
+            NDCG_1 += 1
+            hit_1 += 1
+        if rank < 5:
+            NDCG_5 += 1 / np.log2(rank + 2)
+            hit_5 += 1
         if rank < 10:
             NDCG += 1 / np.log2(rank + 2)
             HT += 1
+        ap += 1.0 / (rank + 1)
         if valid_user % 100 == 0:
             print '.',
             sys.stdout.flush()
 
-    return NDCG / valid_user, HT / valid_user
+    return NDCG_1 / valid_user, hit_1 / valid_user, NDCG_5 / valid_user, hit_5 / valid_user, NDCG / valid_user, HT / valid_user, ap / valid_user
 
 
 def evaluate_valid(model, dataset, args, sess):
@@ -91,6 +104,12 @@ def evaluate_valid(model, dataset, args, sess):
     NDCG = 0.0
     valid_user = 0.0
     HT = 0.0
+    NDCG_1 = 0.0
+    hit_1 = 0.0
+    NDCG_5 = 0.0
+    hit_5 = 0.0
+    ap = 0.0
+
     if usernum>10000:
         users = random.sample(xrange(1, usernum + 1), 10000)
     else:
@@ -120,11 +139,18 @@ def evaluate_valid(model, dataset, args, sess):
 
         valid_user += 1
 
+        if rank < 1:
+            NDCG_1 += 1
+            hit_1 += 1
+        if rank < 5:
+            NDCG_5 += 1 / np.log2(rank + 2)
+            hit_5 += 1
         if rank < 10:
             NDCG += 1 / np.log2(rank + 2)
             HT += 1
+        ap += 1.0 / (rank + 1)
         if valid_user % 100 == 0:
             print '.',
             sys.stdout.flush()
 
-    return NDCG / valid_user, HT / valid_user
+    return NDCG_1 / valid_user, hit_1 / valid_user, NDCG_5 / valid_user, hit_5 / valid_user, NDCG / valid_user, HT / valid_user, ap / valid_user
