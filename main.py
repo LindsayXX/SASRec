@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import time
 import argparse
@@ -6,7 +8,6 @@ from sampler import WarpSampler
 from model import Model
 from tqdm import tqdm
 from util import *
-from __future__ import print_function
 
 
 def str2bool(s):
