@@ -42,7 +42,7 @@ for u in user_train:
     cc += len(user_train[u])
 print 'average sequence length: %.2f' % (cc / len(user_train))
 
-f = open(os.path.join(args.dataset + '_' + args.train_dir, 'log.txt'), 'w')
+f = open(os.path.join(args.train_dir + "_" + args.dataset, 'log.txt'), 'w')
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
@@ -58,13 +58,13 @@ t0 = time.time()
 try:
     for epoch in range(1, args.num_epochs + 1):
 
-        for step in tqdm(range(num_batch), total=num_batch, ncols=70, leave=False, unit='b'):
+        for step in range(num_batch):#, total=num_batch, ncols=70, leave=False, unit='b'):
             u, seq, pos, neg = sampler.next_batch()
             auc, loss, _ = sess.run([model.auc, model.loss, model.train_op],
                                     {model.u: u, model.input_seq: seq, model.pos: pos, model.neg: neg,
                                      model.is_training: True})
 
-        if epoch % 20 == 0:
+        if epoch % 10 == 0:
             t1 = time.time() - t0
             T += t1
             print 'Evaluating',
