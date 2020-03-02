@@ -6,6 +6,7 @@ from sampler import WarpSampler
 from model import Model
 from tqdm import tqdm
 from util import *
+from __future__ import print_function
 
 
 def str2bool(s):
@@ -40,7 +41,7 @@ num_batch = len(user_train) / args.batch_size
 cc = 0.0
 for u in user_train:
     cc += len(user_train[u])
-print 'average sequence length: %.2f' % (cc / len(user_train))
+print("average sequence length: ", (cc / len(user_train))
 
 f = open(os.path.join(args.train_dir + "_" + args.dataset, 'log.txt'), 'w')
 config = tf.ConfigProto()
@@ -70,23 +71,23 @@ try:
         if epoch % 10 == 0:
             t1 = time.time() - t0
             T += t1
-            print 'Evaluating',
+            print("Evaluating")
             t_test = evaluate(model, dataset, args, sess)
             t_valid = evaluate_valid(model, dataset, args, sess)
-            print ''
+            #print ''
             #print 'epoch:%d, time: %f(s), valid (NDCG@10: %.4f, HR@10: %.4f), test (NDCG@10: %.4f, HR@10: %.4f)' % (
             #epoch, T, t_valid[0], t_valid[1], t_test[0], t_test[1])
-            print  'epoch:%d, time: %f(s), valid (NDCG@1: %.4f, HR@1: %.4f, NDCG@5: %.4f, HR@5: %.4f, NDCG@10: %.4f, HR@10: %.4f, AP: %.4f), ' % (
-                epoch, T, t_valid[0], t_valid[1], t_valid[2], t_valid[3], t_valid[4], t_valid[5], t_valid[6])
-            print 'test (NDCG@1: %.4f, HR@1: %.4f, NDCG@5: %.4f, HR@5: %.4f, NDCG@10: %.4f, HR@10: %.4f, AP: %.4f)' % (
-                t_test[0], t_test[1], t_test[2], t_test[3], t_test[4], t_test[5], t_test[6])
+            print("epoch:{}, time: {}(s), valid (NDCG@1: {}, HR@1: {}, NDCG@5: {}, HR@5: {}, NDCG@10: {}, HR@10: {}, AP: {}), " format(
+                epoch, T, t_valid[0], t_valid[1], t_valid[2], t_valid[3], t_valid[4], t_valid[5], t_valid[6]))
+            print("test (NDCG@1: {}, HR@1: {}, NDCG@5: {}, HR@5: {}, NDCG@10: {}, HR@10: {}, AP: {})".format(
+                t_test[0], t_test[1], t_test[2], t_test[3], t_test[4], t_test[5], t_test[6]))
             f.write(str(t_valid) + ' ' + str(t_test) + '\n')
             f.flush()
             valid_ndcg.append(t_valid[4])
             valid_hr.append(t_valid[5])
             if epoch > 50:
                 if valid_hr[-1] >= max(valid_hr[-3:-1]) and valid_ndcg[-1] >= max(valid_ndcg[-3:-1]):
-                    print 'early stop at %d epoch' % (epoch)
+                    print('early stop at %d epoch' % (epoch))
                     break
             t0 = time.time()
 except:
