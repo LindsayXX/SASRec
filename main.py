@@ -44,7 +44,7 @@ for u in user_train:
     cc += len(user_train[u])
 print("average sequence length: ", cc / len(user_train))
 
-f = open(os.path.join(args.train_dir + "_" + args.dataset, 'log.txt'), 'w')
+f = open(os.path.join(args.train_dir, args.dataset + 'log.txt'), 'w')
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
 config.allow_soft_placement = True
