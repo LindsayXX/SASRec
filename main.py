@@ -84,9 +84,10 @@ try:
             f.flush()
             valid_ndcg.append(t_valid[4])
             valid_hr.append(t_valid[5])
-            if valid_hr[-1] >= max(valid_hr[-3:-1]) and valid_ndcg[-1] >= max(valid_ndcg[-3:-1]):
-                print 'early stop at %d epoch' % (epoch)
-                break
+            if epoch > 50:
+                if valid_hr[-1] >= max(valid_hr[-3:-1]) and valid_ndcg[-1] >= max(valid_ndcg[-3:-1]):
+                    print 'early stop at %d epoch' % (epoch)
+                    break
             t0 = time.time()
 except:
     sampler.close()
