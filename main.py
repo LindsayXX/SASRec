@@ -55,6 +55,9 @@ sess.run(tf.initialize_all_variables())
 T = 0.0
 t0 = time.time()
 
+valid_ndcg = []
+valid_hr = []
+
 try:
     for epoch in range(1, args.num_epochs + 1):
 
@@ -79,6 +82,11 @@ try:
                 t_test[0], t_test[1], t_test[2], t_test[3], t_test[4], t_test[5], t_test[6])
             f.write(str(t_valid) + ' ' + str(t_test) + '\n')
             f.flush()
+            valid_ndcg.append(t_valid[4])
+            valid_hr.append(t_valid[5])
+            if valid_hr[-1] >= max(valid_hr[-3:-1]) and valid_ndcg[-1] >= max(valid_ndcg[-3:-1]):
+                print 'early stop at %d epoch' % (epoch)
+                break
             t0 = time.time()
 except:
     sampler.close()
