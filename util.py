@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 import copy
 import random
@@ -150,7 +151,7 @@ def evaluate_valid(model, dataset, args, sess):
             HT += 1
         ap += 1.0 / (rank + 1)
         if valid_user % 100 == 0:
-            print '.',
+            print('.')
             sys.stdout.flush()
 
     return NDCG_1 / valid_user, hit_1 / valid_user, NDCG_5 / valid_user, hit_5 / valid_user, NDCG / valid_user, HT / valid_user, ap / valid_user
