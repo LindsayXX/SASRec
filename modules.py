@@ -80,7 +80,7 @@ def embedding(inputs,
     ```
     import tensorflow as tf
     
-    inputs = tf.to_int32(tf.reshape(tf.range(2*3), (2, 3)))
+    inputs = tf.cast(tf.reshape(tf.range(2*3), (2, 3)), dtype=tf.int32) # to_int32(tf.reshape(tf.range(2*3), (2, 3)))
     outputs = embedding(inputs, 6, 2, zero_pad=True)
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -98,7 +98,7 @@ def embedding(inputs,
     ```
     import tensorflow as tf
     
-    inputs = tf.to_int32(tf.reshape(tf.range(2*3), (2, 3)))
+    inputs = tf.cast(tf.reshape(tf.range(2*3), (2, 3)), dtype=tf.int32) #to_int32(tf.reshape(tf.range(2*3), (2, 3)))
     outputs = embedding(inputs, 6, 2, zero_pad=False)
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
