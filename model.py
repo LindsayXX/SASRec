@@ -40,7 +40,7 @@ class Model():
             self.seq += t
 
             # Dropout
-            self.seq = tf.layers.dropout(self.seq,
+            self.seq = tf.keras.layers.dropout(self.seq,
                                          rate=args.dropout_rate,
                                          training=tf.convert_to_tensor(self.is_training))
             self.seq *= mask
