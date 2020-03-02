@@ -62,7 +62,7 @@ valid_hr = []
 
 try:
     for epoch in range(1, args.num_epochs + 1):
-
+        print(epoch)
         for step in range(num_batch):#, total=num_batch, ncols=70, leave=False, unit='b'):
             u, seq, pos, neg = sampler.next_batch()
             auc, loss, _ = sess.run([model.auc, model.loss, model.train_op],
@@ -87,8 +87,8 @@ try:
             valid_ndcg.append(t_valid[4])
             valid_hr.append(t_valid[5])
             if epoch > 50:
-                if valid_hr[-1] >= max(valid_hr[-3:-1]) and valid_ndcg[-1] >= max(valid_ndcg[-3:-1]):
-                    print('early stop at %d epoch' % (epoch))
+                if valid_hr[-1] > max(valid_hr[-3:-1]) and valid_ndcg[-1] > max(valid_ndcg[-3:-1]):
+                    print('early stop at {} epoch'.format(epoch))
                     break
             t0 = time.time()
 except:
