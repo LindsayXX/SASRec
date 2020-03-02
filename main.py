@@ -52,7 +52,7 @@ sess = tf.Session(config=config)
 
 sampler = WarpSampler(user_train, usernum, itemnum, batch_size=args.batch_size, maxlen=args.maxlen, n_workers=3)
 model = Model(usernum, itemnum, args)
-sess.run(tf.initialize_all_variables())
+sess.run(tf.global_variables_initializer()) #sess.run(tf.initialize_all_variables())
 
 T = 0.0
 t0 = time.time()
@@ -75,7 +75,7 @@ try:
             print("Evaluating")
             t_test = evaluate(model, dataset, args, sess)
             t_valid = evaluate_valid(model, dataset, args, sess)
-            #print ''
+            print('')
             #print 'epoch:%d, time: %f(s), valid (NDCG@10: %.4f, HR@10: %.4f), test (NDCG@10: %.4f, HR@10: %.4f)' % (
             #epoch, T, t_valid[0], t_valid[1], t_test[0], t_test[1])
             print("epoch:{}, time: {}(s), valid (NDCG@1: {}, HR@1: {}, NDCG@5: {}, HR@5: {}, NDCG@10: {}, HR@10: {}, AP: {}), ".format(
@@ -87,7 +87,7 @@ try:
             valid_ndcg.append(t_valid[4])
             valid_hr.append(t_valid[5])
             if epoch > 50:
-                if valid_hr[-1] > max(valid_hr[-3:-1]) and valid_ndcg[-1] > max(valid_ndcg[-3:-1]):
+                if valid_hr[-1] > max(valid_hr[-4:-1]) and valid_ndcg[-1] > max(valid_ndcg[-4:-1]):
                     print('early stop at {} epoch'.format(epoch))
                     break
             t0 = time.time()
