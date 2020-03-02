@@ -41,7 +41,7 @@ num_batch = len(user_train) / args.batch_size
 cc = 0.0
 for u in user_train:
     cc += len(user_train[u])
-print("average sequence length: ", (cc / len(user_train))
+print("average sequence length: ", cc / len(user_train))
 
 f = open(os.path.join(args.train_dir + "_" + args.dataset, 'log.txt'), 'w')
 config = tf.ConfigProto()
