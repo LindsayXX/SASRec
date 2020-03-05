@@ -163,12 +163,12 @@ def multihead_attention(queries,
             num_units = queries.get_shape().as_list[-1]
         
         # Linear projections
-        # Q = tf.layers.dense(queries, num_units, activation=tf.nn.relu) # (N, T_q, C)
-        # K = tf.layers.dense(keys, num_units, activation=tf.nn.relu) # (N, T_k, C)
-        # V = tf.layers.dense(keys, num_units, activation=tf.nn.relu) # (N, T_k, C)
-        Q = tf.keras.layers.dense(queries, num_units, activation=None) # (N, T_q, C)
-        K = tf.keras.layers.dense(keys, num_units, activation=None) # (N, T_k, C)
-        V = tf.keras.layers.dense(keys, num_units, activation=None) # (N, T_k, C)
+        Q = tf.layers.dense(queries, num_units, activation=tf.nn.relu) # (N, T_q, C)
+        K = tf.layers.dense(keys, num_units, activation=tf.nn.relu) # (N, T_k, C)
+        V = tf.layers.dense(keys, num_units, activation=tf.nn.relu) # (N, T_k, C)
+        #Q = tf.keras.layers.dense(queries, num_units, activation=None) # (N, T_q, C)
+        #K = tf.keras.layers.dense(keys, num_units, activation=None) # (N, T_k, C)
+        #V = tf.keras.layers.dense(keys, num_units, activation=None) # (N, T_k, C)
         
         # Split and concat
         Q_ = tf.concat(tf.split(Q, num_heads, axis=2), axis=0) # (h*N, T_q, C/h) 
@@ -208,8 +208,9 @@ def multihead_attention(queries,
         outputs *= query_masks # broadcasting. (N, T_q, C)
           
         # Dropouts
-        outputs = tf.keras.layers.dropout(outputs, rate=dropout_rate, training=tf.convert_to_tensor(is_training))
-               
+        #outputs = tf.keras.layers.dropout(outputs, rate=dropout_rate, training=tf.convert_to_tensor(is_training))
+        outputs = tf.layers.dropout(outputs, rate=dropout_rate, training=tf.convert_to_tensor(is_training))
+
         # Weighted sum
         outputs = tf.matmul(outputs, V_) # ( h*N, T_q, C/h)
         
@@ -247,13 +248,18 @@ def feedforward(inputs,
         # Inner layer
         params = {"inputs": inputs, "filters": num_units[0], "kernel_size": 1,
                   "activation": tf.nn.relu, "use_bias": True}
-        outputs = tf.keras.layers.conv1d(**params)
-        outputs = tf.keras.layers.dropout(outputs, rate=dropout_rate, training=tf.convert_to_tensor(is_training))
+        #outputs = tf.keras.layers.conv1d(**params)
+        #outputs = tf.keras.layers.dropout(outputs, rate=dropout_rate, training=tf.convert_to_tensor(is_training))
+        outputs = tf.layers.conv1d(**params)
+        outputs = tf.layers.dropout(outputs, rate=dropout_rate, training=tf.convert_to_tensor(is_training))
         # Readout layer
         params = {"inputs": outputs, "filters": num_units[1], "kernel_size": 1,
                   "activation": None, "use_bias": True}
-        outputs = tf.keras.layers.conv1d(**params)
-        outputs = tf.keras.layers.dropout(outputs, rate=dropout_rate, training=tf.convert_to_tensor(is_training))
+        #outputs = tf.keras.layers.conv1d(**params)
+        #outputs = tf.keras.layers.dropout(outputs, rate=dropout_rate, training=tf.convert_to_tensor(is_training))
+        outputs = tf.layers.conv1d(**params)
+        outputs = tf.layers.dropout(outputs, rate=dropout_rate, training=tf.convert_to_tensor(is_training))
+
         
         # Residual connection
         outputs += inputs
